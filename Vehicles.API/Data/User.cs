@@ -1,17 +1,55 @@
-﻿using Vehicles.API.Data.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using Vehicles.API.Data.Entities;
+using Vehicles.Common.Enums;
 
 namespace Vehicles.API.Data
 {
-    internal class User
+    public class User : IdentityUser
     {
-        public string Address { get; set; }
-        public string Document { get; set; }
-        public DocumentType DocumentType { get; set; }
-        public string Email { get; set; }
+
+        [Display(Name = "Nombres")]
+        [MaxLength(50, ErrorMessage = "El campo {0} no puede tener más de {1} carácteres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string FirstName { get; set; }
+
+        [Display(Name = "Apellidos")]
+        [MaxLength(50, ErrorMessage = "El campo {0} no puede tener más de {1} carácteres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string UserName { get; set; }
-        public object UserType { get; set; }
+
+        [Display(Name = "Tipo de documento")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public DocumentType DocumentType { get; set; }
+
+        [Display(Name = "Documento")]
+        [MaxLength(20, ErrorMessage = "El campo {0} no puede tener más de {1} carácteres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string Document { get; set; }
+
+        [Display(Name = "Dirección")]
+        [MaxLength(100, ErrorMessage = "El campo {0} no puede tener más de {1} carácteres.")]
+        public string Address { get; set; }
+
+        [Display(Name = "Foto")]
+        public Guid ImageId { get; set; }
+
+        [Display(Name = "Foto")]
+        public string ImageFullPath => ImageId == Guid.Empty
+            ? $"https://localhost:44329/images/noimage.png"
+            : $"https://vehiclessalazar.blob.core.windows.net/users/{ImageId}";
+        
+        
+        [Display(Name = "Tipo de usuario")]
+        public UserType UserType { get; set; }
+
+        [Display(Name = "Usuario")]
+        public string FullName => $"{FirstName} {LastName}";
+
+        
     }
 }
