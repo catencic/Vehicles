@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Vehicles.API.Data;
+using Vehicles.API.Models;
 
 namespace Vehicles.API.Herlpers
 {
@@ -13,7 +14,8 @@ namespace Vehicles.API.Herlpers
         private readonly SignInManager<User> _signInManager;
 
 
-        public UserHelper(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DataContext context, SignInManager<User> signInManager)
+        public UserHelper(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DataContext context, 
+            SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -63,14 +65,14 @@ namespace Vehicles.API.Herlpers
             return await _userManager.IsInRoleAsync(user, roleName);
         }
 
+        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+        {
+            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+        }
 
-
-
-
-
-
-
-
-
+        public  async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
     }
 }
